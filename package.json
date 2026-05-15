@@ -1,0 +1,16 @@
+{
+  "name": "llm-service-gateway",
+  "version": "0.1.0",
+  "description": "Unified backend gateway for multiple LLM providers with routing, failover, caching, usage tracking, rate limiting, and observability.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
