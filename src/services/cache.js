@@ -29,8 +29,9 @@ export class TTLCache {
   }
 }
 
-export function cacheKeyForChat(request) {
+export function cacheKeyForChat(request, apiKey) {
   const stable = {
+    apiKey: apiKey ?? null,
     model: request.model,
     messages: request.messages,
     temperature: request.temperature ?? 1,

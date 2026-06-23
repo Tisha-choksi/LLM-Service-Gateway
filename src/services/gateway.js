@@ -14,12 +14,18 @@ export class LlmGateway {
     this.metrics.increment("gateway_requests_total", { route: "chat_completions" });
 
     const cacheable = request.cache !== false && !request.stream;
-    const cacheKey = cacheable ? cacheKeyForChat(request) : "";
+    const cacheKey = cacheable ? cacheKeyForChat(request, context.apiKey) : "";
 
     if (cacheable) {
       const cached = this.cache.get(cacheKey);
       if (cached) {
         this.metrics.increment("gateway_cache_hits_total");
+        this.usageStore.record({
+          apiKey: context.apiKey,
+          provider: cached.provider,
+          model: cached.model || request.model,
+          usage: normalizeUsage(cached.usage)
+        });
         return {
           ...cached,
           cached: true
