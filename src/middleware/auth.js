@@ -13,6 +13,6 @@ export function authenticate(req, acceptedKeys) {
 
 function bearerToken(value) {
   if (!value) return "";
-  const [scheme, token] = value.split(" ");
-  return scheme?.toLowerCase() === "bearer" ? token : "";
+  const [scheme, token] = value.trim().split(/\s+/);
+  return scheme?.toLowerCase() === "bearer" && token ? token : "";
 }
