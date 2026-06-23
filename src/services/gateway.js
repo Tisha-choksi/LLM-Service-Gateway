@@ -13,7 +13,7 @@ export class LlmGateway {
     validateChatRequest(request);
     this.metrics.increment("gateway_requests_total", { route: "chat_completions" });
 
-    const cacheable = request.cache !== false && !request.stream;
+    const cacheable = request.cache !== false;
     const cacheKey = cacheable ? cacheKeyForChat(request, context.apiKey) : "";
 
     if (cacheable) {
@@ -75,6 +75,9 @@ function validateChatRequest(request) {
   }
   if (!Array.isArray(request.messages) || request.messages.length === 0) {
     throw new HttpError(400, "Field 'messages' must be a non-empty array");
+  }
+  if (request.stream) {
+    throw new HttpError(501, "Streaming responses are not supported");
   }
 }
 
