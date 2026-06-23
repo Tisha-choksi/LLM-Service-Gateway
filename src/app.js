@@ -16,6 +16,7 @@ export function createApp({ config, gateway, rateLimiter, usageStore, router, me
       }
 
       if (req.method === "GET" && url.pathname === "/metrics") {
+        authenticate(req, config.gatewayApiKeys);
         return sendJson(res, 200, metrics.snapshot());
       }
 
