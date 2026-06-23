@@ -7,6 +7,7 @@ export class RateLimiter {
 
   check(key) {
     const now = this.now();
+    this.sweep(now);
     const windowMs = 60_000;
     const bucket = this.buckets.get(key) || { count: 0, resetAt: now + windowMs };
 
@@ -24,5 +25,11 @@ export class RateLimiter {
       remaining: Math.max(0, this.limit - bucket.count),
       resetAt: bucket.resetAt
     };
+  }
+
+  sweep(now) {
+    for (const [key, bucket] of this.buckets) {
+      if (now >= bucket.resetAt) this.buckets.delete(key);
+    }
   }
 }
