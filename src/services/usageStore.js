@@ -1,5 +1,6 @@
 export class UsageStore {
-  constructor() {
+  constructor({ maxRows = 1000 } = {}) {
+    this.maxRows = maxRows;
     this.rows = [];
     this.totals = new Map();
   }
@@ -10,6 +11,9 @@ export class UsageStore {
       ...event
     };
     this.rows.push(enriched);
+    if (this.rows.length > this.maxRows) {
+      this.rows.splice(0, this.rows.length - this.maxRows);
+    }
 
     const key = [event.apiKey, event.provider, event.model].join(":");
     const current = this.totals.get(key) || {

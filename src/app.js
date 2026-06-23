@@ -20,8 +20,8 @@ export function createApp({ config, gateway, rateLimiter, usageStore, router, me
       }
 
       if (req.method === "GET" && url.pathname === "/usage") {
-        const auth = authenticate(req, config.gatewayApiKeys);
-        return sendJson(res, 200, usageStore.snapshot(), { "x-gateway-api-key": auth.apiKey });
+        authenticate(req, config.gatewayApiKeys);
+        return sendJson(res, 200, usageStore.snapshot());
       }
 
       if (req.method === "POST" && url.pathname === "/v1/chat/completions") {

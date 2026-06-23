@@ -18,10 +18,18 @@ export class TTLCache {
   }
 
   set(key, value) {
+    this.sweep();
     this.items.set(key, {
       value,
       expiresAt: this.now() + this.ttlMs
     });
+  }
+
+  sweep() {
+    const now = this.now();
+    for (const [key, item] of this.items) {
+      if (now >= item.expiresAt) this.items.delete(key);
+    }
   }
 
   size() {
